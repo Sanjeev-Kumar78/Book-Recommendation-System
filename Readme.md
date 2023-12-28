@@ -1,4 +1,5 @@
 # Book Recommendation System 
+![image](https://github.com/Sanjeev-Kumar78/Book-Recommendation-System/assets/62820550/ab0c824e-ad83-43c4-bfe3-f3678fc9e966)
 
 ## Introduction
 This is a book recommendation system based on the book rating data from [GoodReads_100k](https://www.kaggle.com/datasets/mdhamani/goodreads-books-100k/) dataset. The dataset contains 100k book. 
