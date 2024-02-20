@@ -8,4 +8,5 @@ pandas
 ipykernel
 papermill
 opendatasets
+notebook
 
