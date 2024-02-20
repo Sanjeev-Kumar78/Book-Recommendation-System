@@ -67,8 +67,8 @@ else:
 @st.cache_resource()
 def load_models():
     cosine_sim_desc = pickle.load(open('model/cosine_sim_desc.pkl', 'rb'))
-    # final_data = pd.read_csv('model/final_data.csv')
-    final_data = pickle.load(open('model/final_data.pkl', 'rb'))
+    final_data = pd.read_csv('model/final_data.csv')
+    # final_data = pickle.load(open('model/final_data.pkl', 'rb'))
     st.success('Models loaded successfully!')
     return cosine_sim_desc, final_data
 
