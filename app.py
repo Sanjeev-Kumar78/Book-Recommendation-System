@@ -6,8 +6,7 @@ import os , papermill as pm
 # Set the app title and favicon
 st.set_page_config(page_title='Book Recommendation System', page_icon='📚', layout='wide')
 
-# Run .ipynb file if model doesn't contain the final_data & cosine
-
+# Run .ipynb file if model doesn't contain the final_data & cosine_sim_desc
 # Execute the IPython Notebook
 if not (os.path.exists('model/final_data.csv') and os.path.exists('model/cosine_sim_desc.pkl')):
     st.warning('Models not found! Running the notebook to create models...')
