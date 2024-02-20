@@ -34,7 +34,7 @@ def model_generate(path):
 
 
     # Convert the data type to float32
-    tfidf_matrix_desc = tfidf_matrix_desc.astype(np.float16)
+    tfidf_matrix_desc = tfidf_matrix_desc.astype(np.float32)
     # print(f"tfidf_matrix_desc: {tfidf_matrix_desc}") # To check Output from above code
 
 
