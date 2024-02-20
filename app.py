@@ -15,7 +15,7 @@ def model_generate(path):
     from sklearn.metrics.pairwise import linear_kernel
 
     # Create a TF-IDF Vectorizer for the 'desc' column
-    tfidf_vectorizer = TfidfVectorizer(stop_words='english', max_features=8000)
+    tfidf_vectorizer = TfidfVectorizer(stop_words='english', max_features=1000)
 
     # To check Output from above code: 
     # print(f"Final Data Null Values: {final_data['Desc'].isnull().sum()}")
