@@ -1,0 +1,5 @@
+To Store cosine similarity of each pair of documents
+and then use it to find the most similar documents to a given document
+
+'''
+To store Final_data.csv
