@@ -7,15 +7,15 @@ import os , papermill as pm
 st.set_page_config(page_title='Book Recommendation System', page_icon='📚', layout='wide')
 
 # Run .ipynb file if model doesn't contain the final_data & cosine_sim_desc
-@st.cache_resource
-def cosine_sim_desc_generate(path):
+@st.cache_resource()
+def model_generate(path):
     final_data = pd.read_csv(path)
     import numpy as np
     from sklearn.feature_extraction.text import TfidfVectorizer
     from sklearn.metrics.pairwise import linear_kernel
 
     # Create a TF-IDF Vectorizer for the 'desc' column
-    tfidf_vectorizer = TfidfVectorizer(stop_words='english', max_features=10000)
+    tfidf_vectorizer = TfidfVectorizer(stop_words='english', max_features=5000)
 
     # To check Output from above code: 
     # print(f"Final Data Null Values: {final_data['Desc'].isnull().sum()}")
@@ -41,8 +41,10 @@ def cosine_sim_desc_generate(path):
     # Compute the cosine similarity matrix for book descriptions
     cosine_sim_desc = linear_kernel(tfidf_matrix_desc, tfidf_matrix_desc)
     # print(f"cosine_sim_desc: {cosine_sim_desc}") # To check Output from above code
-    pickle.dump(cosine_sim_desc, open('model/cosine_sim_desc.pkl', 'wb'))
 
+    # Save the cosine_sim_desc matrix to a pickle file
+    pickle.dump(cosine_sim_desc, open('model/cosine_sim_desc.pkl', 'wb'), protocol=4)
+    
 # Execute the IPython Notebook
 
 if not os.path.exists('model/final_data.csv'):
@@ -51,12 +53,11 @@ if not os.path.exists('model/final_data.csv'):
         'recommendation_data_clean.ipynb',
         'output_notebook.ipynb'
     )
-
 if not os.path.exists('model/cosine_sim_desc.pkl'):
-    cosine_sim_desc_generate('model/final_data.csv')
-    warn.empty()
+    model_generate('model/final_data.csv')
 else:
     model_present = st.success('Models already exist!')
+warn.empty()
 
 
 # Function to load the pickled model
@@ -68,7 +69,7 @@ def load_models():
     # final_data = pickle.load(open('model/final_data.pkl', 'rb'))
     st.success('Models loaded successfully!')
     return cosine_sim_desc, final_data
-
+model_present.empty()
 cosine_sim_desc, final_data = load_models()
 
 
