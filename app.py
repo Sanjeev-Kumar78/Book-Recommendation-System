@@ -1,12 +1,25 @@
 import streamlit as st
 import pickle,csv
 import pandas as pd
+import os , papermill as pm
 
 # Set the app title and favicon
 st.set_page_config(page_title='Book Recommendation System', page_icon='📚', layout='wide')
 
-# Function to load the pickled model
+# Run .ipynb file if model doesn't contain the final_data & cosine
 
+# Execute the IPython Notebook
+if not (os.path.exists('model/final_data.csv') and os.path.exists('model/cosine_sim_desc.pkl')):
+    st.warning('Models not found! Running the notebook to create models...')
+    pm.execute_notebook(
+        'recommendation_data_clean.ipynb',
+        'output_notebook.ipynb'
+    )
+
+else:
+    st.success('Models already exist!')
+
+# Function to load the pickled model
 
 @st.cache_resource()
 def load_models():
