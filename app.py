@@ -7,16 +7,57 @@ import os , papermill as pm
 st.set_page_config(page_title='Book Recommendation System', page_icon='📚', layout='wide')
 
 # Run .ipynb file if model doesn't contain the final_data & cosine_sim_desc
+@st.cache_resource
+def cosine_sim_desc_generate(path):
+    final_data = pd.read_csv(path)
+    import numpy as np
+    from sklearn.feature_extraction.text import TfidfVectorizer
+    from sklearn.metrics.pairwise import linear_kernel
+
+    # Create a TF-IDF Vectorizer for the 'desc' column
+    tfidf_vectorizer = TfidfVectorizer(stop_words='english', max_features=10000)
+
+    # To check Output from above code: 
+    # print(f"Final Data Null Values: {final_data['Desc'].isnull().sum()}")
+    # print(f"Lenght of Final Data: {len(final_data)}")
+
+    # print(f"TfidfVectorizer: {tfidf_vectorizer}")
+
+
+    # Replace NaN values with an empty string
+    final_data['Desc'] = final_data['Desc'].fillna('')
+
+    # Apply the TF-IDF vectorizer to the 'desc' column
+    tfidf_matrix_desc = tfidf_vectorizer.fit_transform(final_data['Desc'])
+
+    # print(f"tfidf_matrix_desc: {tfidf_matrix_desc}") # To check Output from above code
+
+
+    # Convert the data type to float32
+    tfidf_matrix_desc = tfidf_matrix_desc.astype(np.float32)
+    # print(f"tfidf_matrix_desc: {tfidf_matrix_desc}") # To check Output from above code
+
+
+    # Compute the cosine similarity matrix for book descriptions
+    cosine_sim_desc = linear_kernel(tfidf_matrix_desc, tfidf_matrix_desc)
+    # print(f"cosine_sim_desc: {cosine_sim_desc}") # To check Output from above code
+    pickle.dump(cosine_sim_desc, open('model/cosine_sim_desc.pkl', 'wb'))
+
 # Execute the IPython Notebook
-if not (os.path.exists('model/final_data.csv') and os.path.exists('model/cosine_sim_desc.pkl')):
-    st.warning('Models not found! Running the notebook to create models...')
+
+if not os.path.exists('model/final_data.csv'):
+    warn = st.warning('Models not found! Running the notebook to create models...')
     pm.execute_notebook(
         'recommendation_data_clean.ipynb',
         'output_notebook.ipynb'
     )
 
+if not os.path.exists('model/cosine_sim_desc.pkl'):
+    cosine_sim_desc_generate('model/final_data.csv')
+    warn.empty()
 else:
-    st.success('Models already exist!')
+    model_present = st.success('Models already exist!')
+
 
 # Function to load the pickled model
 
