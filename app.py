@@ -15,7 +15,7 @@ def model_generate(path):
     from sklearn.metrics.pairwise import linear_kernel
 
     # Create a TF-IDF Vectorizer for the 'desc' column
-    tfidf_vectorizer = TfidfVectorizer(stop_words='english', max_features=1000)
+    tfidf_vectorizer = TfidfVectorizer(stop_words='english', max_features=7500)
 
     # To check Output from above code: 
     # print(f"Final Data Null Values: {final_data['Desc'].isnull().sum()}")
@@ -28,13 +28,13 @@ def model_generate(path):
     final_data['Desc'] = final_data['Desc'].fillna('')
 
     # Apply the TF-IDF vectorizer to the 'desc' column
-    tfidf_matrix_desc = tfidf_vectorizer.fit_transform(final_data['Desc'])
+    tfidf_matrix_desc = tfidf_vectorizer.fit_transform(final_data['Title'] +" " + final_data['Genre'])
 
     # print(f"tfidf_matrix_desc: {tfidf_matrix_desc}") # To check Output from above code
 
 
     # Convert the data type to float32
-    tfidf_matrix_desc = tfidf_matrix_desc.astype(np.float32)
+    tfidf_matrix_desc = tfidf_matrix_desc.astype(np.float16)
     # print(f"tfidf_matrix_desc: {tfidf_matrix_desc}") # To check Output from above code
 
 
@@ -51,15 +51,13 @@ if not os.path.exists('model/final_data.csv'):
     warn = st.warning('Models not found! Running the notebook to create models...')
     pm.execute_notebook(
         'recommendation_data_clean.ipynb',
-        'output_notebook.ipynb'
+        'output.ipynb',
     )
     warn.empty()
 if not os.path.exists('model/cosine_sim_desc.pkl'):
     warn = st.warning('Models not found! Running the notebook to create models...')
     model_generate('model/final_data.csv')
     warn.empty()
-else:
-    model_present = st.success('Models already exist!')
 
 
 # Function to load the pickled model
@@ -69,7 +67,6 @@ def load_models():
     cosine_sim_desc = pickle.load(open('model/cosine_sim_desc.pkl', 'rb'))
     final_data = pd.read_csv('model/final_data.csv')
     # final_data = pickle.load(open('model/final_data.pkl', 'rb'))
-    st.success('Models loaded successfully!')
     return cosine_sim_desc, final_data
 
 cosine_sim_desc, final_data = load_models()
