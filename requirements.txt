@@ -7,4 +7,5 @@ streamlit
 pandas
 ipykernel
 papermill
+opendatasets
 
