@@ -53,11 +53,13 @@ if not os.path.exists('model/final_data.csv'):
         'recommendation_data_clean.ipynb',
         'output_notebook.ipynb'
     )
+    warn.empty()
 if not os.path.exists('model/cosine_sim_desc.pkl'):
+    warn = st.warning('Models not found! Running the notebook to create models...')
     model_generate('model/final_data.csv')
+    warn.empty()
 else:
     model_present = st.success('Models already exist!')
-warn.empty()
 
 
 # Function to load the pickled model
