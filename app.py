@@ -10,37 +10,23 @@ st.set_page_config(page_title='Book Recommendation System', page_icon='📚', la
 @st.cache_resource()
 def model_generate(path):
     final_data = pd.read_csv(path)
-    import numpy as np
+    import torch
     from sklearn.feature_extraction.text import TfidfVectorizer
-    from sklearn.metrics.pairwise import linear_kernel
-
+    
     # Create a TF-IDF Vectorizer for the 'desc' column
-    tfidf_vectorizer = TfidfVectorizer(stop_words='english', max_features=7500)
-
-    # To check Output from above code: 
-    # print(f"Final Data Null Values: {final_data['Desc'].isnull().sum()}")
-    # print(f"Lenght of Final Data: {len(final_data)}")
-
-    # print(f"TfidfVectorizer: {tfidf_vectorizer}")
-
-
+    tfidf_vectorizer = TfidfVectorizer(stop_words='english', max_features=10000)
+    
     # Replace NaN values with an empty string
     final_data['Desc'] = final_data['Desc'].fillna('')
-
+    
     # Apply the TF-IDF vectorizer to the 'desc' column
-    tfidf_matrix_desc = tfidf_vectorizer.fit_transform(final_data['Title'] +" " + final_data['Genre'])
-
-    # print(f"tfidf_matrix_desc: {tfidf_matrix_desc}") # To check Output from above code
-
-
+    tfidf_matrix_desc = tfidf_vectorizer.fit_transform(final_data['Desc'])
+    
     # Convert the data type to float32
-    tfidf_matrix_desc = tfidf_matrix_desc.astype(np.float32)
-    # print(f"tfidf_matrix_desc: {tfidf_matrix_desc}") # To check Output from above code
-
-
+    tfidf_matrix_desc = torch.tensor(tfidf_matrix_desc.toarray(), dtype=torch.float32)
+    
     # Compute the cosine similarity matrix for book descriptions
-    cosine_sim_desc = linear_kernel(tfidf_matrix_desc, tfidf_matrix_desc)
-    # print(f"cosine_sim_desc: {cosine_sim_desc}") # To check Output from above code
+    cosine_sim_desc = torch.matmul(tfidf_matrix_desc, tfidf_matrix_desc.t())
 
     # Save the cosine_sim_desc matrix to a pickle file
     pickle.dump(cosine_sim_desc, open('model/cosine_sim_desc.pkl', 'wb'), protocol=4)
