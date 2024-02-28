@@ -8,4 +8,3 @@ pandas
 ipykernel
 papermill
 notebook
-torch
