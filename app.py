@@ -15,7 +15,7 @@ def model_generate(path):
     from sklearn.metrics.pairwise import linear_kernel
 
     # Create a TF-IDF Vectorizer for the 'desc' column
-    tfidf_vectorizer = TfidfVectorizer(stop_words='english', max_features=5000)
+    tfidf_vectorizer = TfidfVectorizer(stop_words='english', max_features=7500)
 
     # To check Output from above code: 
     # print(f"Final Data Null Values: {final_data['Desc'].isnull().sum()}")
@@ -24,11 +24,8 @@ def model_generate(path):
     # print(f"TfidfVectorizer: {tfidf_vectorizer}")
 
 
-    # Replace NaN values with an empty string
-    final_data['Desc'] = final_data['Desc'].fillna('')
-
     # Apply the TF-IDF vectorizer to the 'desc' column
-    tfidf_matrix_desc = tfidf_vectorizer.fit_transform(final_data['Desc'])
+    tfidf_matrix_desc = tfidf_vectorizer.fit_transform(final_data['Title'] +" " + final_data['Genre'])
 
     # print(f"tfidf_matrix_desc: {tfidf_matrix_desc}") # To check Output from above code
 
