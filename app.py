@@ -13,9 +13,11 @@ def model_generate(path):
     import numpy as np
     from sklearn.feature_extraction.text import TfidfVectorizer
     from sklearn.metrics.pairwise import linear_kernel
+    from sklearnex import patch_sklearn
+    patch_sklearn()
 
     # Create a TF-IDF Vectorizer for the 'desc' column
-    tfidf_vectorizer = TfidfVectorizer(stop_words='english', max_features=5000)
+    tfidf_vectorizer = TfidfVectorizer(stop_words='english', max_features=10000)
 
     # To check Output from above code: 
     # print(f"Final Data Null Values: {final_data['Desc'].isnull().sum()}")
