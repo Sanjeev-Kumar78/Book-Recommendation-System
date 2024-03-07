@@ -17,7 +17,7 @@ def model_generate(path):
     patch_sklearn()
 
     # Create a TF-IDF Vectorizer for the 'desc' column
-    tfidf_vectorizer = TfidfVectorizer(stop_words='english', max_features=10000)
+    tfidf_vectorizer = TfidfVectorizer(stop_words='english', max_features=7500)
 
     # To check Output from above code: 
     # print(f"Final Data Null Values: {final_data['Desc'].isnull().sum()}")
