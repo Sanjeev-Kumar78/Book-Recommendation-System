@@ -26,11 +26,8 @@ def model_generate(path):
     # print(f"TfidfVectorizer: {tfidf_vectorizer}")
 
 
-    # Replace NaN values with an empty string
-    final_data['Desc'] = final_data['Desc'].fillna('')
-
     # Apply the TF-IDF vectorizer to the 'desc' column
-    tfidf_matrix_desc = tfidf_vectorizer.fit_transform(final_data['Desc'])
+    tfidf_matrix_desc = tfidf_vectorizer.fit_transform(final_data['Title'] +" " + final_data['Genre'])
 
     # print(f"tfidf_matrix_desc: {tfidf_matrix_desc}") # To check Output from above code
 
